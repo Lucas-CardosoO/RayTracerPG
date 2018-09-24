@@ -1,17 +1,17 @@
 #pragma once
 
 #include <vector>
-#include "Vec3.h"
+#include "Vector3D.h"
 
 class Image{
 private:
     int width, height;
-    std::vector<Vec3> buffer;
+    std::vector<Vector3D> buffer;
 
 public:
     Image(int width, int height);
 
-    void SetPixel(int x, int y, const Vec3& color);
+    void SetPixel(int x, int y, const Vector3D& color);
 
     void SaveAsPBM(const std::string& filePath) const;
 };
