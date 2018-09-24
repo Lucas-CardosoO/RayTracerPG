@@ -1,7 +1,6 @@
 #pragma once
 
 class Point3D;
-class NormalV;
 
 class Vector3D {
 public:
