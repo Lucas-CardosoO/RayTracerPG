@@ -11,8 +11,8 @@ private:
 
 public:
     Image(int width, int height);
-
-    void SetPixel(int x, int y, const RGBColor& color);
-
-    void SaveAsPBM(const std::string& filePath) const;
+    int getWidth();
+    int getHeight();
+    void setPixel(int x, int y, const RGBColor& color);
+    void saveAsPBM(const std::string& filePath) const;
 };
