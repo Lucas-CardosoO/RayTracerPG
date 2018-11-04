@@ -3,12 +3,12 @@
 #include "Vector3D.h"
 #include "Point3D.h"
 #include "Ray.h"
-#include "ObjectIntesection.h"
+#include "ObjectIntersection.h"
 #include <cmath>
 
 class Geometry{
     public:
-        virtual bool intersect(const Ray& r, ObjectIntesection* info = nullptr) const = 0;
+        virtual bool intersect(const Ray& r, ObjectIntersection* info = nullptr) const = 0;
 
         virtual Point3D getPoint() const = 0;
 };
@@ -21,7 +21,7 @@ class Sphere : public Geometry {
     public:
         Sphere(Point3D center, double radius );
         
-        bool intersect(const Ray& r, ObjectIntesection* info = nullptr) const override;
+        bool intersect(const Ray& r, ObjectIntersection* info = nullptr) const;
 
         Point3D getPoint() const override;
 };

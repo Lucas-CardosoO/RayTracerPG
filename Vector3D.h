@@ -1,6 +1,6 @@
 #pragma once
 
-class Point3D;
+#include "Point3D.h"
 
 class Vector3D {
 public:
