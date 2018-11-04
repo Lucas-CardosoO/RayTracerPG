@@ -102,3 +102,8 @@ Vector3D Vector3D::hat() {
 Vector3D operator*(const double a, const Vector3D& v){
     return Vector3D(v.x * a, v.y * a, v.z * a);
 }
+
+Vector3D proj(const Vector3D &u, const Vector3D &v) {
+    double coef = (u * v) / (v * v);
+    return coef*v;
+}
