@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Point3D.h"
-
+#include <string>
 class Vector3D {
 public:
     double x, y, z;
@@ -33,6 +33,8 @@ public:
 
     void normalize();
     Vector3D hat();
+
+    std::string toString() const;
 
 };
 

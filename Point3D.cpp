@@ -1,6 +1,7 @@
 #include <math.h>
 #include "Point3D.h"
 #include "Vector3D.h"
+#include <string>
 
 Point3D::Point3D() {
     x = 0;
@@ -69,4 +70,10 @@ Point3D Point3D::operator*(const double a) const{
 
 Point3D operator*(const double a, const Point3D& p){
     return Point3D(p.x * a, p.y * a, p.z * a);
+}
+
+std::string Point3D::toString() const {
+    std::string r = "";
+    r += "("+ std::to_string(x) +", " +std::to_string(y) +", "+std::to_string(z)+")";
+    return r;
 }

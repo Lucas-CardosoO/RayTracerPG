@@ -107,3 +107,9 @@ Vector3D proj(const Vector3D &u, const Vector3D &v) {
     double coef = (u * v) / (v * v);
     return coef*v;
 }
+
+std::string Vector3D::toString() const {
+    std::string r = "";
+    r += "(" + std::to_string(x) + ", " + std::to_string(y) +", " + std::to_string(z)+")";
+    return r;
+}

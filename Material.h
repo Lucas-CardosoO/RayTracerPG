@@ -3,4 +3,6 @@
 
 class Material {
 
+    public:
+        Material() {};
 };

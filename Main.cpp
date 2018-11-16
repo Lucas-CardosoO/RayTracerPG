@@ -15,7 +15,7 @@ using namespace std;
 const int width = 200, height = 100;
 
 Scene scene;
-Camera cam;
+// Camera cam;
 int res_w, res_h;
 map<string, Material> materials;
 
@@ -43,7 +43,10 @@ void read(const string &path_in) {
             double cx, cy, cz, r;
             string materialName;
             in >> cx >> cy >> cz >> r >> materialName;
-            // Geometry sp = Sphere(Point3D(cx, cy, cz), r);
+            Geometry *sp = new Sphere(Point3D(cx, cy, cz), r);
+            Material *m = new Material();
+            Object obj = Object(sp, m);
+            scene.add(&obj);
             // Material m = materials[materialName];
             // Object obj = Object(&sp, &m);
             // scene.add(&obj);
@@ -53,13 +56,28 @@ void read(const string &path_in) {
     cout << "fim da leitura.\n";
 }
 
+#define p3 Point3D
+#define v3 Vector3D
 int main(int args, char** argv) {
     cout << args << " args:" << endl;
     for(int i = 0; i < args; i++) {
         cout << argv[i] << endl;
     }
 
-    read(argv[1]);
+    // read(argv[1]);
+    // test
+
+    // Geometry *E1 = new Sphere(p3(1, 1, 1), 20);
+    // Material *m1 = new Material();
+    // Object obj1 = Object(E1, m1);
+    // scene.add(&obj1);
+    // Geometry *E2 = new Sphere(p3(2, 0, -1), 15);
+    // Object obj2 = Object(E2, m1);
+    // scene.add(&obj2);
+
+    // for(auto objPtr : scene.objects) {
+    //     cout << objPtr->geometry->toString() << endl;
+    // }
 
     Image img(width, height);
     RGBColor white(216,191,216);

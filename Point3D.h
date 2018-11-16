@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class Vector3D;
 
 class Point3D {
@@ -23,6 +25,8 @@ public:
     double distance_squared(const Point3D& p);
 
     Point3D operator* (const double a) const;
+
+    std::string toString() const;
 };
 
 Point3D operator* (const double a, const Point3D& p);
