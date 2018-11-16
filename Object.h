@@ -5,6 +5,7 @@
 #include "ObjectIntersection.h"
 #include "Ray.h"
 
+
 class Object {
     public:
         Geometry* geometry;

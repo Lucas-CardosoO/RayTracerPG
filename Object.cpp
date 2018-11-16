@@ -1,4 +1,4 @@
-
+#include "Object.h"
 #include "Geometry.h"
 #include "Material.h"
 #include "ObjectIntersection.h"
@@ -9,6 +9,6 @@ Object::Object(Geometry* g, Material* m) {
     this->material = m;
 }
 
-bool Object::intersect(const Ray& r, ObjectIntersection *info = nullptr) {
+bool Object::intersect(const Ray& r, ObjectIntersection *info) {
     return this->geometry->intersect(r, info);
 }

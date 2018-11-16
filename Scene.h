@@ -3,12 +3,12 @@
 #include "Object.h"
 #include "ObjectIntersection.h"
 #include <vector>
+#include "Ray.h"
 
 class Scene {
-private:
-    std::vector<Object*> objects;
-public:
-    bool intersect(const &Ray r, ObjectItersection* info = nullptr) const;
-    Vector3D trace(const Ray &r, int recursionLevel = 0) const;
-    void add(Object *object);
-}
+    public:
+        std::vector<Object*> objects;
+        bool intersect(const Ray &r, ObjectIntersection* info = nullptr) const;
+        Vector3D trace(const Ray &r, int recursionLevel = 0) const;
+        void add(Object *object);
+};
