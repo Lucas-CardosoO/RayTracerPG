@@ -6,14 +6,18 @@
 #include "Scene.h"
 #include <float.h>
 
+/**
+ *  chama método intersect para cada objeto da cena e retorna verdadeiro caso haja interseção.
+ *  Se houver mais de uma interseção, a informação do primeiro hit é guardado no endereço info.
+**/
 bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     ObjectIntersection *temp_info;
     bool hit_anyone = false;
     double t_max = DBL_MAX;
     for(auto obj : objects) {
-        if(obj->intersect(r, temp_info)) {
+        if(obj->intersect(r, temp_info)) { 
             hit_anyone = true;
-            if(temp_info->t < t_max) {
+            if(temp_info->t < t_max) { // queremos interseção mais perto da origem do raio.
                 info = temp_info;
                 t_max = info->t;
             }
