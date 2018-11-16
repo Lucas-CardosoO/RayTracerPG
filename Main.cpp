@@ -37,7 +37,7 @@ void read(const string &path_in) {
         } else if(str == "material") {
             string name;
             double r, g, b, kd, ks, ke, alpha;
-            in >> r >> g >> b >> kd >> ks >> ke >> alpha;
+            in >> name >> r >> g >> b >> kd >> ks >> ke >> alpha;
             // materials[name] = Material(RGBColor(r, g, b), ... )
         } else if(str == "sphere") {
             double cx, cy, cz, r;
