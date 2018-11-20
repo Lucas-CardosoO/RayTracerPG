@@ -1,5 +1,6 @@
 #include <cmath>
 #include <string>
+#include <iostream>
 #include "Object.h"
 #include "Vector3D.h"
 #include "Point3D.h"
@@ -25,10 +26,12 @@ bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
 
     double delta = b*b-4*a*c;
     if(delta < 0) return false;
+    // std::cout << "Well I'm not false" << std::endl;
     double t1 = (-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
     info->t = (t1 < t2)? t1 : t2;
     info->point = r.sample(info->t);
-    info->normal = (info->point - this->center)/this->radius;
+    info->normal = (info->point - this->center);
+    // std::cout << "But I returned true\n";
     return true;
 }
 

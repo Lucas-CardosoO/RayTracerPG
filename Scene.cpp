@@ -1,9 +1,11 @@
 #include <vector>
+#include <iostream>
 
 #include "Object.h"
 #include "ObjectIntersection.h"
 #include "Ray.h"
 #include "Scene.h"
+#include "RGBColor.h"
 #include <float.h>
 
 /**
@@ -16,6 +18,7 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     double t_max = DBL_MAX;
     for(auto obj : objects) {
         if(obj->intersect(r, temp_info)) { 
+            // std::cout << "INTERSECTOU!!!" << std::endl;
             hit_anyone = true;
             if(temp_info->t < t_max) { // queremos interseção mais perto da origem do raio.
                 info = temp_info;
@@ -26,8 +29,14 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     return hit_anyone;
 }
 
-Vector3D Scene::trace(const Ray &r, int recursionLevel) const {
-    
+RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
+    ObjectIntersection* info;
+    if(this->intersect(r, info)) {
+        // std::cout << "INTERSECTOU!!!" << std::endl;
+        return RGBColor(67,100,230);
+    } else {
+        return RGBColor(216,191,216);
+    }
 }
 
 void Scene::add(Object *object) {

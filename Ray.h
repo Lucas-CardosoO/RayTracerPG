@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3D.h"
 #include <float.h>
+#include <string>
 
 class Ray {
 private:
@@ -12,4 +13,5 @@ public:
     Point3D sample(const double &t) const;
     Point3D getOrigin() const;
     Vector3D getDirection() const;
+    std::string toString();
 };

@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "Image.h"
 #include "RGBColor.h"
-
+#include "ObjectIntersection.h"
 using namespace std;
 
 Scene scene;
@@ -50,24 +50,41 @@ void read(const string &path_in) {
             // scene.add(&obj);
         }
     }
+    cout << "finished reading.\n";
 }
 
-#define p3 Point3D
-#define v3 Vector3D
 int main(int args, char** argv) {
-    cam = Camera(Point3D(0, 0, 0), Vector3D(1, 1, 0), Vector3D(0, 1, 0), 200, 10);
+    // read("./t1.txt");
+    cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), 3.14/4, 1);
+    Geometry *E1 = new Sphere(Point3D(0, 0, 3), 1);
+    Object obj = Object(E1, nullptr);
+    scene.add(&obj);
     res_w = 200, res_h = 100;
     Image img(res_w, res_h);
 
     RGBColor white(216,191,216);
     RGBColor blue(67,100,230);
 
+    cout << cam.toString();
+    // if(scene.objects.empty()) {
+    //     cout << "nothing in the scene\n";
+    //     return 0;
+    // }
+    cout << "objects(" << scene.objects.size() <<"):\n";
+    for(auto objPtr : scene.objects) {
+        Object o = *objPtr;
+        cout << o.geometry->toString() << endl;
+    }
+
+    cout << "starting to print\n";
     for(int i = 0; i < img.height; i++) {
         for(int j = 0; j < img.width; j++) {
-            if(j > i) img.setPixel(i, j, blue);
-            else img.setPixel(i, j, white);
+            Ray r = cam.getRay(double(j), double(i), res_w, res_h);
+            img.setPixel(i, j, scene.trace(r, 0));
         }
     }
+
+    cout << "done printing\n";
 
     img.saveAsPBM(""); // saving as out
 

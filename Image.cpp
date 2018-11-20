@@ -14,7 +14,7 @@ void Image::setPixel(int x, int y, const RGBColor& color) {
 }
 
 void Image::saveAsPBM(const std::string& filePath) const {
-    std::ofstream out(filePath+"\\cena.ppm");
+    std::ofstream out("cena.ppm");
     out << "P3\n" << this->width << " " << this->height  << "\n255\n";
     for(int i = 0; i < this->height; i++) {
         for(int j = 0; j < this->width; j++) {
@@ -23,5 +23,6 @@ void Image::saveAsPBM(const std::string& filePath) const {
         }
     }
     out.close();
+    std::cout << "Saved file\n";
 }
 
