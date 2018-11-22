@@ -21,11 +21,11 @@ bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
     double delta = b*b-4*a*c;
     if(delta < 0) return false;
     double t1 = (-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
-    ObjectIntersection record;
-    info = &record;
-    record.t = (t1 < t2)? t1 : t2;
-    record.point = r.sample(info->t);
-    record.normal = (record.point - this->center);
+    // ObjectIntersection record;
+    // info = &record;
+    info->t = (t1 < t2)? t1 : t2;
+    info->point = r.sample(info->t);
+    info->normal = (info->point - this->center);
     // std::cout << "But I returned true\n";
     return true;
 }
