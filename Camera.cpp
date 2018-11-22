@@ -11,8 +11,8 @@ Camera::Camera(Point3D pos, Vector3D target, Vector3D up, double FOV, double d, 
     this->axisZ = target; this->axisZ.normalize();
     this->fov = FOV;
     this->near = d;
-    this->axisX = this->axisZ^up; this->axisX.normalize();
-    this->axisY = this->axisX^this->axisZ;
+    this->axisX = up^this->axisZ; this->axisX.normalize();
+    this->axisY = this->axisZ^this->axisX;
     this->tam_hor = 2*tan(fov/2)*near;
     this->tam_ver = this->tam_hor/ratio;
 }
