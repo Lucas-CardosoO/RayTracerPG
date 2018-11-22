@@ -75,10 +75,7 @@ int main(int args, char** argv) {
 
     cout << "CAMERA: "<<endl;
     cout << cam.toString();
-    if(scene.objects.empty()) {
-        cout << "nothing in the scene\n";
-        return 0;
-    }
+
     cout << "objects(" << scene.objects.size() <<"):\n";
     for(auto objPtr : scene.objects) {
         cout << "{ ";

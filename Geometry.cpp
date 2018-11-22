@@ -13,12 +13,6 @@ Sphere::Sphere(Point3D center, double radius) {
 }
 
 bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
-    /*
-        Substitui 't' (tirado da eq. de 'r' na forma paramétrica) na eq. da esfera.
-        Acha interseções analizando as raizes do polinômio
-        r = r.origem + t * r.direção
-        E = (x - x0)^2 + (y - y0)^2 + (z - z0)^2 = R^2
-    */
     Vector3D oc = r.getOrigin() - this->center;
     double a = r.getDirection()*r.getDirection();
     double b = 2*(oc*r.getDirection());
@@ -26,10 +20,12 @@ bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
 
     double delta = b*b-4*a*c;
     if(delta < 0) return false;
-    // double t1 = (-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
-    // info->t = (t1 < t2)? t1 : t2;
-    // info->point = r.sample(info->t);
-    // info->normal = (info->point - this->center);
+    double t1 = (-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
+    ObjectIntersection record;
+    info = &record;
+    record.t = (t1 < t2)? t1 : t2;
+    record.point = r.sample(info->t);
+    record.normal = (record.point - this->center);
     // std::cout << "But I returned true\n";
     return true;
 }

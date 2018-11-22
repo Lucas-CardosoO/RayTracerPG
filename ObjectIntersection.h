@@ -6,9 +6,10 @@
 
 class Object;
 
-struct ObjectIntersection {
-    double t;
-    Vector3D normal;
-    Point3D point;
-    Object* o;
+class ObjectIntersection {
+    public:
+        double t;
+        Vector3D normal;
+        Point3D point;
+        Object* o;
 };
