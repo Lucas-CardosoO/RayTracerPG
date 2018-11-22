@@ -13,7 +13,6 @@ Sphere::Sphere(Point3D center, double radius) {
 }
 
 bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
-    std::cout<<"a\n";
     /*
         Substitui 't' (tirado da eq. de 'r' na forma paramétrica) na eq. da esfera.
         Acha interseções analizando as raizes do polinômio
@@ -26,7 +25,6 @@ bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
     double c = (oc * oc) - this->radius*this->radius;
 
     double delta = b*b-4*a*c;
-    std::cout<<"b\n";
     if(delta < 0) return false;
     // double t1 = (-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
     // info->t = (t1 < t2)? t1 : t2;

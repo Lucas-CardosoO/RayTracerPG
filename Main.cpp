@@ -60,8 +60,9 @@ int main(int args, char** argv) {
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
     Geometry *E1 = new Sphere(Point3D(0, 0, 6), 2);
     Object obj = Object(E1, nullptr);
-    Geometry *E2 = new Sphere(Point3D(2, 0, 3), 1.8);
+    Geometry *E2 = new Sphere(Point3D(2, 0, 7), 1.8);
     Object obj2 = Object(E2, nullptr);
+    Geometry *E3 = new Sphere(Point3D(-2, 0, 7), 1.8);
     scene.add(&obj);
     scene.add(&obj2);
     res_w = 200, res_h = 100;
