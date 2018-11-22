@@ -20,10 +20,10 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
         if(obj->intersect(r, temp_info)) { 
             // std::cout << "INTERSECTOU!!!" << std::endl;
             hit_anyone = true;
-            if(temp_info->t < t_max) { // queremos interseção mais perto da origem do raio.
-                info = temp_info;
-                t_max = info->t;
-            }
+            // if(temp_info->t < t_max) { // queremos interseção mais perto da origem do raio.
+            //     info = temp_info;
+            //     t_max = info->t;
+            // }
         }
     }
     return hit_anyone;

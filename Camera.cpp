@@ -12,7 +12,7 @@ Camera::Camera(Point3D pos, Vector3D target, Vector3D up, double FOV, double d) 
     this->axisY = up; this->axisY.normalize();
     this->fov = FOV;
     this->near = d;
-    this->axisX = up ^ this->axisZ; this->axisX.normalize();
+    this->axisX = this->axisZ ^ up; this->axisX.normalize();
     this->axisY = this->axisX ^ this->axisZ; this->axisY.normalize();
 }
 
@@ -21,8 +21,9 @@ Ray Camera::getRay(double x, double y, int width, int height) const {
     double ndc_x = (x + 0.5)/double(width);
     double ndc_y = (y + 0.5)/double(height);
     double screen_x = 2 * ndc_x - 1;
-    double screen_y = 2 * ndc_y - 1;
+    double screen_y = 1 - 2 * ndc_y;
     double ratio = double(width)/double(height);
+    // double cam_x = (2 * screen_x - 1) * ratio * std::tan(fov/2);
     double cam_x = (2 * screen_x - 1) * ratio;
     double cam_y = 1 - 2 * screen_y;
 

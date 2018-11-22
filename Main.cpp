@@ -17,6 +17,7 @@ Camera cam;
 int res_w, res_h;
 map<string, Material> materials;
 
+const double pi = 3.14159265;
 
 // recebe o caminho do arquivo de entrada como uma string, e lê como a especificação sugere, sendo as variáveis da cena globais
 void read(const string &path_in) {
@@ -55,25 +56,31 @@ void read(const string &path_in) {
 
 int main(int args, char** argv) {
     // read("./t1.txt");
-    cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), 3.14/4, 1);
-    Geometry *E1 = new Sphere(Point3D(0, 0, 3), 1);
-    Object obj = Object(E1, nullptr);
-    scene.add(&obj);
+    // center, target, up, fov, near
+    cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, -1), Vector3D(0, 1, 0), pi/4, 1);
+    // Geometry *E1 = new Sphere(Point3D(0, 0, 3), 2);
+    // Object obj = Object(E1, nullptr);
+    Geometry *E2 = new Sphere(Point3D(-4, 0, 3), 1.8);
+    Object obj2 = Object(E2, nullptr);
+    // scene.add(&obj);
+    scene.add(&obj2);
     res_w = 200, res_h = 100;
     Image img(res_w, res_h);
 
     RGBColor white(216,191,216);
     RGBColor blue(67,100,230);
 
+    cout << "CAMERA: "<<endl;
     cout << cam.toString();
-    // if(scene.objects.empty()) {
-    //     cout << "nothing in the scene\n";
-    //     return 0;
-    // }
+    if(scene.objects.empty()) {
+        cout << "nothing in the scene\n";
+        return 0;
+    }
     cout << "objects(" << scene.objects.size() <<"):\n";
     for(auto objPtr : scene.objects) {
+        cout << "{ ";
         Object o = *objPtr;
-        cout << o.geometry->toString() << endl;
+        cout << o.geometry->toString() << "} " << endl;
     }
 
     cout << "starting to print\n";

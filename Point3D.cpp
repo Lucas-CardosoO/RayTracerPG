@@ -73,7 +73,7 @@ Point3D operator*(const double a, const Point3D& p){
 }
 
 std::string Point3D::toString() const {
-    std::string r = "";
+    std::string r = "P";
     r += "("+ std::to_string(x) +", " +std::to_string(y) +", "+std::to_string(z)+")";
     return r;
 }
