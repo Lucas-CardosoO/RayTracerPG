@@ -5,29 +5,26 @@
 
 #include <cmath>
 #include <string>
-
-Camera::Camera(Point3D pos, Vector3D target, Vector3D up, double FOV, double d) {
+typedef Vector3D v3;
+Camera::Camera(Point3D pos, Vector3D target, Vector3D up, double FOV, double d, double ratio) {
     this->position = pos;
-    this->axisZ = target*(-1); this->axisZ.normalize();
-    this->axisY = up; this->axisY.normalize();
+    this->axisZ = target; this->axisZ.normalize();
     this->fov = FOV;
     this->near = d;
-    this->axisX = this->axisZ ^ up; this->axisX.normalize();
-    this->axisY = this->axisX ^ this->axisZ; this->axisY.normalize();
+    this->axisX = this->axisZ^up; this->axisX.normalize();
+    this->axisY = this->axisX^this->axisZ;
+    this->tam_hor = 2*tan(fov/2)*near;
+    this->tam_ver = this->tam_hor/ratio;
 }
 
 Ray Camera::getRay(double x, double y, int width, int height) const {
-    // Point3D corner = Point3D(this->position.x, this->position.y, this->near);
-    double ndc_x = (x + 0.5)/double(width);
-    double ndc_y = (y + 0.5)/double(height);
-    double screen_x = 2 * ndc_x - 1;
-    double screen_y = 1 - 2 * ndc_y;
-    double ratio = double(width)/double(height);
-    // double cam_x = (2 * screen_x - 1) * ratio * std::tan(fov/2);
-    double cam_x = (2 * screen_x - 1) * ratio;
-    double cam_y = 1 - 2 * screen_y;
+    v3 point = v3(this->position.x - this->tam_hor/2 + x * tam_hor/width,
+                  this->position.y - this->tam_ver/2 + y * tam_ver/height,
+                  this->position.z - this->near);
+    v3 dir = point-this->position;
+    dir.normalize();
 
-    Ray r = Ray(this->position, Vector3D(cam_x, cam_y, this->near)); 
+    Ray r = Ray(this->position, dir); 
     return r;
 }
 
