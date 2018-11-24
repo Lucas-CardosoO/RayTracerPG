@@ -35,7 +35,7 @@ public:
     Vector3D hat();
 
     std::string toString() const;
-
+    Vector3D proj(Vector3D a, Vector3D b);
 };
 
 Vector3D operator* (const double a, const Vector3D& v);

@@ -12,7 +12,7 @@
 #include "ObjectIntersection.h"
 using namespace std;
 
-Scene scene;
+Scene scene(Point3D(0, -100, 0));
 Camera cam;
 int res_w, res_h;
 map<string, Material> materials;
@@ -62,19 +62,19 @@ int main(int args, char** argv) {
     // center, target, up, fov, near, ratio
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
     Geometry *E1 = new Sphere(Point3D(7, -3, 9), 1);
-    Material M1 = Material(RGBColor(198, 78, 71), 0.3, 0.5, 0.3, 2);
+    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4);
     Object obj =  Object(E1, &M1);
     scene.add(&obj);
+    Geometry *E2 = new Sphere(Point3D(0, 1600, 500), 1600);
+    Material M2 = Material(RGBColor(0, 255, 0), 0.01, 0.50, 0.5, 0.25);
+    Object obj2 = Object(E2, &M2);
+    scene.add(&obj2);
+    Geometry *E3 = new Sphere(Point3D(-4, 0, 7), 0.5);
+    Material M3 = Material(RGBColor(0, 0, 255), 0.829, 0.296648, 0.8, 0.088);
+    Object obj3 = Object(E3, &M3);
+    scene.add(&obj3);
 
-    // Geometry *E2 = new Sphere(Point3D(4, 0, 7), 0.5);
-    // Object obj2 = Object(E2, nullptr);
-    // scene.add(&obj2);
-
-    // Geometry *E3 = new Sphere(Point3D(-4, 0, 7), 0.5);
-    // Object obj3 = Object(E3, nullptr);
-    // scene.add(&obj3);
-
-    res_w = 500, res_h = 250;
+    res_w = 400, res_h = 200;
     Image img(res_w, res_h);
 
 

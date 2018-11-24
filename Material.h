@@ -6,7 +6,7 @@
 class Material {
     public:
         RGBColor color;
-        double Kd, Ke, Ka, alpha;
-        Material(RGBColor c, double kd, double ke, double ka, double a) : color(c), Kd(kd), Ke(ke), Ka(a), alpha(a) {}
+        double Kd, Ks, Ka, alpha;
+        Material(RGBColor c, double kd, double Ks, double ka, double a) : color(c), Kd(kd), Ks(Ks), Ka(a), alpha(a) {}
 
 };

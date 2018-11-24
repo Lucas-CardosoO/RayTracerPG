@@ -10,6 +10,8 @@
 class Scene {
     public:
         std::vector<Object*> objects;
+        Point3D lightPoint;
+        Scene(Point3D light) : lightPoint(light) {}
         bool intersect(const Ray &r, ObjectIntersection* info = nullptr) const;
         RGBColor trace(const Ray &r, int recursionLevel = 0) const;
         void add(Object *object);

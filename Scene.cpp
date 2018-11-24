@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <float.h>
+#include <cmath>
 
 #include "Object.h"
 #include "ObjectIntersection.h"
@@ -23,6 +24,7 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
             if(temp_info.t < t_max) { // queremos interseção mais perto da origem do raio.
                 info->t = temp_info.t;
                 info->normal = temp_info.normal;
+                info->normal.normalize();
                 info->point = temp_info.point;
                 info->o = obj;
                 t_max = temp_info.t;
@@ -33,12 +35,13 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
 }
 
 bool Scene::shadow(Point3D point, ObjectIntersection* infoLight, ObjectIntersection* infoObject) const{
-    Point3D lightPoint = Point3D(-10, -10, 0);
-    Vector3D direction = point - lightPoint;
+    Vector3D direction = point - this->lightPoint;
     direction.normalize();
-    Ray rayToLight = Ray(lightPoint, direction);
+    Ray rayToLight = Ray(this->lightPoint, direction);
 
     if(!intersect(rayToLight, infoLight) ) return true;
+
+
 
     if(infoLight->point == infoObject->point){
         return false;
@@ -56,12 +59,21 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
     RGBColor col;
     if(this->intersect(r, &info)) {
         ObjectIntersection infoLight;
-        if ((this->shadow(info.point, &infoLight, &info))) {
-            col = RGBColor(0,0,0);
-            return col;
-        }
+        // if ((this->shadow(info.point, &infoLight, &info))) {
+        //     col = RGBColor(0,0,0);
+        //     return col;
+        // }
         Material *m = info.o->material;
-        col = m->color;
+        Vector3D lightDir = (this->lightPoint-info.point);
+        lightDir.normalize();
+        double difuseScalar = std::max(info.normal * lightDir, 0.0);
+        Vector3D proj = ((lightDir * info.normal)/(info.normal * info.normal))*info.normal;
+        Vector3D R = lightDir + 2 * proj;
+        R.normalize();
+        double specularScalar = std::pow(std::max(R*(-1*r.direction), 0.0), m->alpha); 
+
+        col = m->color + (m->Kd*difuseScalar)*RGBColor(255, 255, 255) + (m->Ks*specularScalar)*RGBColor(255, 255, 255);
+        col.toInt();
     } else {
         col = RGBColor(216,191,216);
     }

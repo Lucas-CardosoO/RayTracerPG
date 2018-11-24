@@ -4,10 +4,10 @@
 #include <string>
 
 class Ray {
-private:
+
+public:
     Vector3D direction;
     Point3D origin;
-public:
     mutable double tmin = DBL_EPSILON, tmax = DBL_MAX;
     Ray(Point3D origin, Vector3D direction);
     Point3D sample(const double &t) const;

@@ -66,3 +66,7 @@ RGBColor RGBColor::operator^(const float a) const{
 RGBColor operator*(const float a, const RGBColor& color) {
     return RGBColor(color.r * a, color.g * a, color.b * a);
 }
+
+void RGBColor::toInt() {
+    this->r = float(int(r)); this->g = float(int(g)); this->b = float(int(b));
+}

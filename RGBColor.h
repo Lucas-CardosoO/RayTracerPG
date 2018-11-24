@@ -19,6 +19,7 @@ public:
     RGBColor operator* (const float a) const;
     RGBColor operator/ (const float a) const;
     RGBColor operator^ (const float a) const;
+    void toInt();
 };
 
 RGBColor operator* (const float a, const RGBColor& color) ;
