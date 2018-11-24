@@ -9,9 +9,11 @@ class PointLight {
         double intensity;
         RGBColor color;
         Point3D position;
-
+        
         PointLight() { }
         PointLight(double i, RGBColor c, Point3D p) : intensity(i), color(c), position(p) {}
+
+        bool enlightPoint(Point3D point);
 };
 
 class DistantLight {

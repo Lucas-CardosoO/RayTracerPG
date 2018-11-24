@@ -77,3 +77,7 @@ std::string Point3D::toString() const {
     r += "("+ std::to_string(x) +", " +std::to_string(y) +", "+std::to_string(z)+")";
     return r;
 }
+
+bool Point3D::operator== (const Point3D& p) const{
+    return ((int)(x*10000) == (int)(p.x*10000)) && ((int)(y*10000) == (int)(p.y*10000)) && (int(z*10000) == int(p.z*10000));
+}

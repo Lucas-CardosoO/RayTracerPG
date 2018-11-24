@@ -27,6 +27,8 @@ public:
     Point3D operator* (const double a) const;
 
     std::string toString() const;
+
+    bool operator== (const Point3D& p) const;
 };
 
 Point3D operator* (const double a, const Point3D& p);

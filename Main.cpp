@@ -58,16 +58,19 @@ int main(int args, char** argv) {
     // read("./t1.txt");
     // center, target, up, fov, near, ratio
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
-    Geometry *E1 = new Sphere(Point3D(0, 0, 6), 0.5);
+    Geometry *E1 = new Sphere(Point3D(0, 0, 9), 1);
     Object obj = Object(E1, nullptr);
-    Geometry *E2 = new Sphere(Point3D(4, 0, 7), 1.8);
-    Object obj2 = Object(E2, nullptr);
-    Geometry *E3 = new Sphere(Point3D(-4, 0, 7), 1.8);
-    Object obj3 = Object(E3, nullptr);
     scene.add(&obj);
-    scene.add(&obj2);
-    scene.add(&obj3);
-    res_w = 200, res_h = 100;
+
+    // Geometry *E2 = new Sphere(Point3D(4, 0, 7), 0.5);
+    // Object obj2 = Object(E2, nullptr);
+    // scene.add(&obj2);
+
+    // Geometry *E3 = new Sphere(Point3D(-4, 0, 7), 0.5);
+    // Object obj3 = Object(E3, nullptr);
+    // scene.add(&obj3);
+
+    res_w = 500, res_h = 250;
     Image img(res_w, res_h);
 
     RGBColor white(216,191,216);

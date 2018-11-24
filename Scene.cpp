@@ -31,11 +31,38 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     return hit_anyone;
 }
 
+bool Scene::shadow(Point3D point, ObjectIntersection* infoLight, ObjectIntersection* infoObject) const{
+    Point3D lightPoint = Point3D(0, 10, 0);
+    Vector3D direction = point - lightPoint;
+    direction.normalize();
+    Ray rayToLight = Ray(lightPoint, direction);
+
+    intersect(rayToLight, infoLight);
+
+
+
+    if(infoLight->point == infoObject->point){
+        return false;
+    }
+
+    // std::cout << "luz: " << infoLight->point.toString() << std::endl;
+    // std::cout << "obj: " << infoLight->point.toString() << std::endl;
+
+    return true;        
+}
+
+
 RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
     ObjectIntersection info;
     if(this->intersect(r, &info)) {
         // std::cout << "normal: " << info.normal.toString() << std::endl;
-        return RGBColor(255 * 0.5 * (info.normal.x+1),255 * 0.5 * (info.normal.y+1),255 * 0.5 * (info.normal.z+1));
+        ObjectIntersection infoLight;
+        
+        if ((this->shadow(info.point, &infoLight, &info))){
+            return RGBColor(0,0,0);
+        }
+
+        return RGBColor((int) (255 * 0.5 * (info.normal.x+1)),(int) (255 * 0.5 * (info.normal.y+1)),(int) (255 * 0.5 * (info.normal.z+1)));
     } else {
         return RGBColor(216,191,216);
     }
