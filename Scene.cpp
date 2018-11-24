@@ -1,12 +1,13 @@
 #include <vector>
 #include <iostream>
+#include <float.h>
 
 #include "Object.h"
 #include "ObjectIntersection.h"
 #include "Ray.h"
+#include "Material.h"
 #include "Scene.h"
 #include "RGBColor.h"
-#include <float.h>
 
 /**
  *  chama método intersect para cada objeto da cena e retorna verdadeiro caso haja interseção.
@@ -23,7 +24,7 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
                 info->t = temp_info.t;
                 info->normal = temp_info.normal;
                 info->point = temp_info.point;
-                info->o = temp_info.o;
+                info->o = obj;
                 t_max = temp_info.t;
             }
         }
@@ -32,14 +33,12 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
 }
 
 bool Scene::shadow(Point3D point, ObjectIntersection* infoLight, ObjectIntersection* infoObject) const{
-    Point3D lightPoint = Point3D(0, 10, 0);
+    Point3D lightPoint = Point3D(-10, -10, 0);
     Vector3D direction = point - lightPoint;
     direction.normalize();
     Ray rayToLight = Ray(lightPoint, direction);
 
-    intersect(rayToLight, infoLight);
-
-
+    if(!intersect(rayToLight, infoLight) ) return true;
 
     if(infoLight->point == infoObject->point){
         return false;
@@ -54,18 +53,19 @@ bool Scene::shadow(Point3D point, ObjectIntersection* infoLight, ObjectIntersect
 
 RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
     ObjectIntersection info;
+    RGBColor col;
     if(this->intersect(r, &info)) {
-        // std::cout << "normal: " << info.normal.toString() << std::endl;
         ObjectIntersection infoLight;
-        
-        if ((this->shadow(info.point, &infoLight, &info))){
-            return RGBColor(0,0,0);
+        if ((this->shadow(info.point, &infoLight, &info))) {
+            col = RGBColor(0,0,0);
+            return col;
         }
-
-        return RGBColor((int) (255 * 0.5 * (info.normal.x+1)),(int) (255 * 0.5 * (info.normal.y+1)),(int) (255 * 0.5 * (info.normal.z+1)));
+        Material *m = info.o->material;
+        col = m->color;
     } else {
-        return RGBColor(216,191,216);
+        col = RGBColor(216,191,216);
     }
+    return col;
 }
 
 void Scene::add(Object *object) {

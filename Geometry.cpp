@@ -13,21 +13,22 @@ Sphere::Sphere(Point3D center, double radius) {
 }
 
 bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
-    Vector3D oc = this->center - r.getOrigin();
+    Vector3D oc = r.getOrigin() - this->center;
     double a = r.getDirection()*r.getDirection();
     double b = 2*(oc*r.getDirection());
     double c = (oc * oc) - this->radius*this->radius;
 
     double delta = b*b-4*a*c;
     if(delta < 0) return false;
-    double t1 = (-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
-
+    double t1 =(-b + std::sqrt(delta))/2*a, t2 = (-b - std::sqrt(delta))/2*a;
+    // std::cout<<"t1:"<<t1<<" " <<"t2:"<<t2<<std::endl;
     // ObjectIntersection record;
     // info = &record;
     info->t = (t1 < t2)? t1 : t2;
     info->point = r.sample(info->t);
     info->normal = (info->point - this->center);
     info->normal.normalize();
+
     // std::cout << "But I returned true\n";
 
     if(info->t < 0){

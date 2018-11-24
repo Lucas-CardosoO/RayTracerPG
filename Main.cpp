@@ -43,8 +43,7 @@ void read(const string &path_in) {
             string materialName;
             in >> cx >> cy >> cz >> r >> materialName;
             Geometry *sp = new Sphere(Point3D(cx, cy, cz), r);
-            Material *m = new Material();
-            Object obj = Object(sp, m);
+            Object obj = Object(sp, nullptr);
             scene.add(&obj);
             // Material m = materials[materialName];
             // Object obj = Object(&sp, &m);
@@ -54,12 +53,17 @@ void read(const string &path_in) {
     cout << "finished reading.\n";
 }
 
+RGBColor white(216,191,216);
+RGBColor blue(67,100,230);
+
 int main(int args, char** argv) {
+
     // read("./t1.txt");
     // center, target, up, fov, near, ratio
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
-    Geometry *E1 = new Sphere(Point3D(0, 0, 9), 1);
-    Object obj = Object(E1, nullptr);
+    Geometry *E1 = new Sphere(Point3D(7, -3, 9), 1);
+    Material M1 = Material(RGBColor(198, 78, 71), 0.3, 0.5, 0.3, 2);
+    Object obj =  Object(E1, &M1);
     scene.add(&obj);
 
     // Geometry *E2 = new Sphere(Point3D(4, 0, 7), 0.5);
@@ -73,8 +77,6 @@ int main(int args, char** argv) {
     res_w = 500, res_h = 250;
     Image img(res_w, res_h);
 
-    RGBColor white(216,191,216);
-    RGBColor blue(67,100,230);
 
     cout << "CAMERA: "<<endl;
     cout << cam.toString();

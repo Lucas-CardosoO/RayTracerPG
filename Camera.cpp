@@ -20,7 +20,7 @@ Camera::Camera(Point3D pos, Vector3D target, Vector3D up, double FOV, double d, 
 Ray Camera::getRay(double x, double y, int width, int height) const {
     v3 point = v3(this->position.x - this->tam_hor/2 + x * tam_hor/width,
                   this->position.y - this->tam_ver/2 + y * tam_ver/height,
-                  this->position.z - this->near);
+                  this->position.z + this->near);
     v3 dir = point-this->position;
     dir.normalize();
 
