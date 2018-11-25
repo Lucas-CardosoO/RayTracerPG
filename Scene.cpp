@@ -2,6 +2,7 @@
 #include <iostream>
 #include <float.h>
 #include <cmath>
+#include <algorithm>
 
 #include "Object.h"
 #include "ObjectIntersection.h"
@@ -75,7 +76,7 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
         col = m->color + (m->Kd*difuseScalar)*RGBColor(255, 255, 255) + (m->Ks*specularScalar)*RGBColor(255, 255, 255);
         col.toInt();
     } else {
-        col = RGBColor(216,191,216);
+        col = RGBColor(0,0,0);
     }
     return col;
 }
