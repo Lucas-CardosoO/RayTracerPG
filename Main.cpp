@@ -62,7 +62,7 @@ void read(const string &path_in) {
 int main(int args, char** argv) {
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
 
-    Geometry *E1 = new Sphere(Point3D(-3, 0, 9), 1);
+    Geometry *E1 = new Sphere(Point3D(0, 0, 9), 1);
     Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4);
     Object obj =  Object(E1, &M1);
     scene.addObject(&obj);
@@ -72,7 +72,7 @@ int main(int args, char** argv) {
     Object obj2 = Object(E2, &M2);
     scene.addObject(&obj2);
 
-    Geometry *E3 = new Sphere(Point3D(3, 0, 9), 1);
+    Geometry *E3 = new Sphere(Point3D(-1, 1, 9), 1);
     Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3);
     Object obj3 = Object(E3, &M3);
     scene.addObject(&obj3);

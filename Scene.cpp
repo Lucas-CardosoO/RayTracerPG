@@ -35,26 +35,6 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     return hit_anyone;
 }
 
-// bool Scene::shadow(Point3D point, ObjectIntersection* infoLight, ObjectIntersection* infoObject) const{
-//     Vector3D direction = point - this->lightPoint;
-//     direction.normalize();
-//     Ray rayToLight = Ray(this->lightPoint, direction);
-
-//     if(!intersect(rayToLight, infoLight) ) return true;
-
-
-
-//     if(infoLight->point == infoObject->point){
-//         return false;
-//     }
-
-//     // std::cout << "luz: " << infoLight->point.toString() << std::endl;
-//     // std::cout << "obj: " << infoLight->point.toString() << std::endl;
-
-//     return true;        
-// }
-
-
 RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
     ObjectIntersection info;
     RGBColor col(0,0,0);
@@ -62,21 +42,26 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
         double difuseScalar = 0, specularScalar = 0;
         Material *m = info.o->material;
         Point3D intersectionPoint = info.point;
-        Vector3D normal = info.normal;        
+        Vector3D normal = info.normal;
+        col += m->color*m->Ka;
+
         for(auto l : this->lights) {
-            // ObjectIntersection infoLight;
-            // if ((this->shadow(info.point, &infoLight, &info))) {
-            //     col = RGBColor(0,0,0);
-            //     return col;
-            // }
+            ObjectIntersection infoLight;
             Vector3D lightDir = l.position - intersectionPoint;
             lightDir.normalize();
-            difuseScalar += std::max(normal * lightDir, 0.0) * l.intensity;
-            Vector3D proj = ((lightDir * normal)/(normal * normal))*normal;
-            Vector3D R = lightDir + 2 * proj;
-            R.normalize();
-            specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), m->alpha) * l.intensity;
-            col += m->color*m->Ka + (m->Kd*difuseScalar)*l.color + (m->Ks*specularScalar)*l.color;
+
+            Ray lightRay = Ray(l.position, -lightDir);
+
+            this->intersect(lightRay, &infoLight);
+
+            if(infoLight.point == intersectionPoint){
+                difuseScalar += std::max(normal * lightDir, 0.0) * l.intensity;
+                Vector3D proj = ((lightDir * normal)/(normal * normal))*normal;
+                Vector3D R = lightDir + 2 * proj;
+                R.normalize();
+                specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), m->alpha) * l.intensity;
+                col += (m->Kd*difuseScalar)*l.color + (m->Ks*specularScalar)*l.color;
+            }
         }
          
         col.toInt();
