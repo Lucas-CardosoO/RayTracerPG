@@ -57,13 +57,12 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
 
 RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
     ObjectIntersection info;
-    RGBColor col;
+    RGBColor col(0,0,0);
     if(this->intersect(r, &info)) {
         double difuseScalar = 0, specularScalar = 0;
         Material *m = info.o->material;
         Point3D intersectionPoint = info.point;
-        Vector3D normal = info.normal;
-        col = m->color;        
+        Vector3D normal = info.normal;        
         for(auto l : this->lights) {
             // ObjectIntersection infoLight;
             // if ((this->shadow(info.point, &infoLight, &info))) {
@@ -77,12 +76,12 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
             Vector3D R = lightDir + 2 * proj;
             R.normalize();
             specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), m->alpha) * l.intensity;
-            col +=(m->Kd*difuseScalar)*l.color + (m->Ks*specularScalar)*l.color;
+            col += m->color*m->Ka + (m->Kd*difuseScalar)*l.color + (m->Ks*specularScalar)*l.color;
         }
          
         col.toInt();
     } else {
-        col = RGBColor(0,0,0);
+        // col = backgroundColor;
     }
     return col;
 }
