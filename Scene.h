@@ -4,16 +4,17 @@
 #include "ObjectIntersection.h"
 #include "RGBColor.h"
 #include "Ray.h"
-
+#include "LightPoint.h"
 #include <vector>
 
 class Scene {
     public:
         std::vector<Object*> objects;
-        Point3D lightPoint;
-        Scene(Point3D light) : lightPoint(light) {}
+        std::vector<LightPoint> lights;
+        Scene() { }
         bool intersect(const Ray &r, ObjectIntersection* info = nullptr) const;
         RGBColor trace(const Ray &r, int recursionLevel = 0) const;
-        void add(Object *object);
+        void addObject(Object *object);
+        void addLight(LightPoint light);
         bool shadow(Point3D point, ObjectIntersection* infoLight, ObjectIntersection* infoObject) const;
 };

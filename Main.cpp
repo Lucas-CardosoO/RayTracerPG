@@ -10,9 +10,14 @@
 #include "Image.h"
 #include "RGBColor.h"
 #include "ObjectIntersection.h"
+#include "LightPoint.h"
+
 using namespace std;
 
-Scene scene(Point3D(-10, -20, 0));
+RGBColor white(255,255,255);
+RGBColor blue(67,100,230);
+
+Scene scene;
 Camera cam;
 int res_w, res_h;
 map<string, Material> materials;
@@ -44,39 +49,42 @@ void read(const string &path_in) {
             in >> cx >> cy >> cz >> r >> materialName;
             Geometry *sp = new Sphere(Point3D(cx, cy, cz), r);
             Object obj = Object(sp, nullptr);
-            scene.add(&obj);
+            scene.addObject(&obj);
             // Material m = materials[materialName];
             // Object obj = Object(&sp, &m);
-            // scene.add(&obj);
+            // scene.addObject(&obj);
         }
     }
     cout << "finished reading.\n";
 }
 
-RGBColor white(216,191,216);
-RGBColor blue(67,100,230);
 
 int main(int args, char** argv) {
-
-    // read("./t1.txt");
-    // center, target, up, fov, near, ratio
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
+
     Geometry *E1 = new Sphere(Point3D(-3, 0, 9), 1);
     Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4);
     Object obj =  Object(E1, &M1);
-    scene.add(&obj);
+    scene.addObject(&obj);
+
     Geometry *E2 = new Sphere(Point3D(0, 1605, 50), 1600);
     Material M2 = Material(RGBColor(0, 255, 0), 0.01, 0.50, 0.5, 0.25);
     Object obj2 = Object(E2, &M2);
-    scene.add(&obj2);
+    scene.addObject(&obj2);
+
     Geometry *E3 = new Sphere(Point3D(3, 0, 9), 1);
     Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3);
     Object obj3 = Object(E3, &M3);
-    scene.add(&obj3);
+    scene.addObject(&obj3);
 
-    res_w = 2000, res_h = 1000;
+    // Add Light
+    LightPoint light1(Point3D(-10, -20, 0), 0.5, white);
+    // scene.addLight(light1);
+    LightPoint light2(Point3D(10, -20, 0), 1, white);
+    scene.addLight(light2);
+
+    res_w = 600, res_h = 300;
     Image img(res_w, res_h);
-
 
     cout << "CAMERA: "<<endl;
     cout << cam.toString();
