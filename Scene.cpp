@@ -35,20 +35,41 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     return hit_anyone;
 }
 
-RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
+RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndice) const {
     ObjectIntersection info;
     RGBColor col(0,0,0);
     if(this->intersect(r, &info)) {
         double difuseScalar = 0, specularScalar = 0;
-        Material *m = info.o->material;
+        Material *material = info.o->material;
         Point3D intersectionPoint = info.point;
         Vector3D normal = info.normal;
-        col += m->color*m->Ka;
+        col += material->color*material->Ka;
+
+        
 
         for(auto l : this->lights) {
-            ObjectIntersection infoLight;
             Vector3D lightDir = l.position - intersectionPoint;
             lightDir.normalize();
+            if(material->willRefract) {
+                // to remember: n_l*sen(teta_i) = n_2*sen(teta_t), Total Internal Reflection (TIR) when sen(teta_i) > n_2/n_1
+                double n1 = curRefractionIndice, n2 = material->refractiveIndice;
+                double cos_teta_i = lightDir * normal;
+                double sen_teta_i = std::sqrt(1 - cos_teta_i*cos_teta_i);
+
+                // check if TIR
+                if(n2/n1 > sen_teta_i) {
+                    return RGBColor(255, 255, 255); // não sei o que colocar
+                }
+                // if not TIR
+                Vector3D t_a, t_o, t; // t adjacente, t ortogonal e t, vetor da direção da transmissão
+                t_a =  n1/n2 * (-lightDir + ( cos_teta_i ) * normal);
+                t_o = -std::sqrt(1 - t_a.len_squared())*normal;
+                t = t_a + t_o;
+                col = 0.3* col;
+                col += 0.7*trace(Ray(intersectionPoint, t), recursionLevel, n2);
+                return col;
+            }
+            ObjectIntersection infoLight;
 
             Ray lightRay = Ray(l.position, -lightDir);
 
@@ -59,8 +80,8 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel) const {
                 Vector3D proj = ((lightDir * normal)/(normal * normal))*normal;
                 Vector3D R = lightDir + 2 * proj;
                 R.normalize();
-                specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), m->alpha) * l.intensity;
-                col += (m->Kd*difuseScalar)*l.color + (m->Ks*specularScalar)*l.color;
+                specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), material->alpha) * l.intensity;
+                col += (material->Kd*difuseScalar)*l.color + (material->Ks*specularScalar)*l.color;
             }
         }
          

@@ -63,25 +63,31 @@ int main(int args, char** argv) {
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
 
     Geometry *E1 = new Sphere(Point3D(0, 0, 9), 1);
-    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4);
+    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4, false, 1);
     Object obj =  Object(E1, &M1);
     scene.addObject(&obj);
 
     Geometry *E2 = new Sphere(Point3D(0, 1605, 50), 1600);
-    Material M2 = Material(RGBColor(0, 255, 0), 0.01, 0.50, 0.5, 0.25);
+    Material M2 = Material(RGBColor(0, 255, 0), 0.01, 0.50, 0.5, 0.25, false, 1);
     Object obj2 = Object(E2, &M2);
     scene.addObject(&obj2);
 
-    Geometry *E3 = new Sphere(Point3D(-1, 1, 9), 1);
-    Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3);
-    Object obj3 = Object(E3, &M3);
-    scene.addObject(&obj3);
+    // Geometry *E3 = new Sphere(Point3D(-3, 4, 13), 1);
+    // Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3, false, 1);
+    // Object obj3 = Object(E3, &M3);
+    // scene.addObject(&obj3);
+
+    // REFRACTIVE OBJECT
+    Geometry *E4 = new Sphere(Point3D(-3, 4, 13), 0.4);
+    Material M4 = Material(RGBColor(174, 238, 249), 0.45, 0.1, 0.8, 3, true, 1.33);
+    Object obj4 = Object(E4, &M4);
+    scene.addObject(&obj4);
 
     // Add Light
     LightPoint light1(Point3D(-10, -20, 0), 0.5, white);
-    // scene.addLight(light1);
-    LightPoint light2(Point3D(10, -20, 0), 1, white);
-    scene.addLight(light2);
+    scene.addLight(light1);
+    // LightPoint light2(Point3D(10, -20, 0), 0.5, white);
+    // scene.addLight(light2);
 
     res_w = 600, res_h = 300;
     Image img(res_w, res_h);
@@ -99,8 +105,8 @@ int main(int args, char** argv) {
     cout << "starting to print\n";
     for(int i = 0; i < img.height; i++) {
         for(int j = 0; j < img.width; j++) {
-            Ray r = cam.getRay(double(j), double(i), res_w, res_h);
-            img.setPixel(i, j, scene.trace(r, 0));
+            Ray r   = cam.getRay(double(j), double(i), res_w, res_h);
+            img.setPixel(i, j, scene.trace(r, 0, 1));
         }
     }
 
