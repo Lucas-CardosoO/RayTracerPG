@@ -36,6 +36,11 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
 }
 
 RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndice) const {
+
+    if (recursionLevel > 4) {
+        return RGBColor(0,0,0);
+    }
+
     ObjectIntersection info;
     RGBColor col(0,0,0);
     if(this->intersect(r, &info)) {
@@ -51,33 +56,33 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
             Vector3D lightDir = l.position - intersectionPoint;
             lightDir.normalize();
             // currently using curRefractionIndice to know if inside sphere
-            if(curRefractionIndice != 1) normal = -normal;
-            if(material->willRefract) {
-                // to remember: n_l*sen(teta_i) = n_2*sen(teta_t), Total Internal Reflection (TIR) when sen(teta_i) > n_2/n_1
-                double n1 = (curRefractionIndice == 1)? curRefractionIndice: material->refractiveIndice;
-                double n2 = (n1 == 1)? curRefractionIndice: 1;
-                double cos_teta_i = lightDir * normal;
-                double sen_teta_i = std::sqrt(1 - cos_teta_i*cos_teta_i);
+            // if(curRefractionIndice != 1) normal = -normal;
+            // if(material->willRefract) {
+            //     // to remember: n_l*sen(teta_i) = n_2*sen(teta_t), Total Internal Reflection (TIR) when sen(teta_i) > n_2/n_1
+            //     double n1 = (curRefractionIndice == 1)? curRefractionIndice: material->refractiveIndice;
+            //     double n2 = (n1 == 1)? curRefractionIndice: 1;
+            //     double cos_teta_i = lightDir * normal;
+            //     double sen_teta_i = std::sqrt(1 - cos_teta_i*cos_teta_i);
 
-                // check if TIR
-                /*
-                    REFRAÇÃO checar https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
-                    bug hints: raio de luz entra na esfera. O ponto de intersecção do próximo trace é um ponto da mesma esfera?
-                    a normal dessa intersecção ( de dentro da esfera ) é calculado da mesma forma?
+            //     // check if TIR
+            //     /*
+            //         REFRAÇÃO checar https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
+            //         bug hints: raio de luz entra na esfera. O ponto de intersecção do próximo trace é um ponto da mesma esfera?
+            //         a normal dessa intersecção ( de dentro da esfera ) é calculado da mesma forma?
 
-                */
-                if(n2/n1 > sen_teta_i) {
-                    return RGBColor(255, 255, 255); // não sei o que colocar
-                }
-                // if not TIR
-                Vector3D t_a, t_o, t; // t adjacente, t ortogonal e t, vetor da direção da transmissão
-                t_a =  n1/n2 * (-lightDir + ( cos_teta_i ) * normal);
-                t_o = -std::sqrt(1 - t_a.len_squared())*normal;
-                t = t_a + t_o;
-                col = 0.3* col;
-                col += 0.7*trace(Ray(intersectionPoint, t), recursionLevel, n2);
-                return col;
-            }
+            //     */
+            //     if(n2/n1 > sen_teta_i) {
+            //         return RGBColor(255, 255, 255); // não sei o que colocar
+            //     }
+            //     // if not TIR
+            //     Vector3D t_a, t_o, t; // t adjacente, t ortogonal e t, vetor da direção da transmissão
+            //     t_a =  n1/n2 * (-lightDir + ( cos_teta_i ) * normal);
+            //     t_o = -std::sqrt(1 - t_a.len_squared())*normal;
+            //     t = t_a + t_o;
+            //     col = 0.3* col;
+            //     col += 0.7*trace(Ray(intersectionPoint, t), recursionLevel, n2);
+            //     return col;
+            // }
             ObjectIntersection infoLight;
 
             Ray lightRay = Ray(l.position, -lightDir);
@@ -90,10 +95,41 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
                 Vector3D R = -lightDir +( 2 * proj);
                 R.normalize();
                 specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), material->alpha) * l.intensity;
+
                 col += (material->Kd*difuseScalar)*l.color + (material->Ks*specularScalar)*l.color;
             }
         }
-         
+        if(material->isReflective){
+            Vector3D proj = ((-r.direction * normal)/(normal * normal))*normal;
+            Vector3D R = r.direction +( 2 * proj);
+            R.normalize();
+
+            RGBColor reflection = trace(Ray(intersectionPoint, R), recursionLevel + 1, curRefractionIndice);
+
+            col += material->Ks*reflection;
+        }
+
+        if(material->isRefracted){
+            std::cout << "indice: " << material->refractiveIndice << std::endl;
+
+            double n1 = (curRefractionIndice == 1)? curRefractionIndice: material->refractiveIndice;
+            double n2 = (n1 == 1)? material->refractiveIndice: 1;
+            double cos_teta = -r.direction * normal;
+            double sen_teta = std::sqrt(1 - cos_teta*cos_teta);
+            std::cout << "teta ok" << std::endl;
+            double sen_alfa = n1*sen_teta/n2;
+            double cos_alfa = std::sqrt(1 - sen_alfa*sen_alfa);
+            std::cout << "alfa ok" << std::endl;
+            Vector3D R = -normal*cos_alfa;
+            R.normalize();
+
+            std::cout << "calculou" << std::endl;
+
+            RGBColor refraction = trace(Ray(intersectionPoint, R), recursionLevel + 1, n2);
+
+            std::cout << "cor ok" << std::endl;
+            col += refraction;
+        }
         col.toInt();
     } else {
         // col = backgroundColor;

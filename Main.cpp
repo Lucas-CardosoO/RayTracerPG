@@ -60,26 +60,26 @@ void read(const string &path_in) {
 
 
 int main(int args, char** argv) {
-    cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 2);
+    cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 1.7);
 
     Geometry *E1 = new Sphere(Point3D(0, 0, 9), 1);
-    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4, false, 1);
+    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4, true, 1.8, false);
     Object obj =  Object(E1, &M1);
     scene.addObject(&obj);
 
     Geometry *E2 = new Sphere(Point3D(0, 1605, 50), 1600);
-    Material M2 = Material(RGBColor(0, 255, 0), 0.5, 0.50, 0.5, 0.25, false, 1);
+    Material M2 = Material(RGBColor(0, 255, 0), 0.5, 0.50, 0.5, 0.25, false, 1, false);
     Object obj2 = Object(E2, &M2);
     scene.addObject(&obj2);
 
-    // Geometry *E3 = new Sphere(Point3D(-3, 4, 13), 1);
-    // Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3, false, 1);
-    // Object obj3 = Object(E3, &M3);
-    // scene.addObject(&obj3);
+    Geometry *E3 = new Sphere(Point3D(-3, 0, 9), 1);
+    Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3, true, 0.5, false);
+    Object obj3 = Object(E3, &M3);
+    scene.addObject(&obj3);
 
     // REFRACTIVE OBJECT
-    Geometry *E4 = new Sphere(Point3D(-3, 4, 13), 0.4);
-    Material M4 = Material(RGBColor(174, 174, 174), 0.45, 0.1, 0.8, 3, true, 1.33);
+    Geometry *E4 = new Sphere(Point3D(3, 0, 9), 1);
+    Material M4 = Material(RGBColor(255, 0, 0), 0.45, 0.1, 0.8, 3, true, 1.33, false);
     Object obj4 = Object(E4, &M4);
     scene.addObject(&obj4);
 
@@ -89,7 +89,7 @@ int main(int args, char** argv) {
     // LightPoint light2(Point3D(10, -20, 0), 0.5, white);
     // scene.addLight(light2);
 
-    res_w = 600, res_h = 300;
+    res_w = 1280, res_h = 720;
     Image img(res_w, res_h);
 
     cout << "CAMERA: "<<endl;
