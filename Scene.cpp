@@ -87,7 +87,7 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
             if(infoLight.point == intersectionPoint){
                 difuseScalar += std::max(normal * lightDir, 0.0) * l.intensity;
                 Vector3D proj = ((lightDir * normal)/(normal * normal))*normal;
-                Vector3D R = lightDir + 2 * proj;
+                Vector3D R = -lightDir +( 2 * proj);
                 R.normalize();
                 specularScalar += std::pow(std::max(R*(-1*r.direction), 0.0), material->alpha) * l.intensity;
                 col += (material->Kd*difuseScalar)*l.color + (material->Ks*specularScalar)*l.color;

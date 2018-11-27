@@ -68,7 +68,7 @@ int main(int args, char** argv) {
     scene.addObject(&obj);
 
     Geometry *E2 = new Sphere(Point3D(0, 1605, 50), 1600);
-    Material M2 = Material(RGBColor(0, 255, 0), 0.01, 0.50, 0.5, 0.25, false, 1);
+    Material M2 = Material(RGBColor(0, 255, 0), 0.5, 0.50, 0.5, 0.25, false, 1);
     Object obj2 = Object(E2, &M2);
     scene.addObject(&obj2);
 
@@ -79,12 +79,12 @@ int main(int args, char** argv) {
 
     // REFRACTIVE OBJECT
     Geometry *E4 = new Sphere(Point3D(-3, 4, 13), 0.4);
-    Material M4 = Material(RGBColor(174, 238, 249), 0.45, 0.1, 0.8, 3, true, 1.33);
+    Material M4 = Material(RGBColor(174, 174, 174), 0.45, 0.1, 0.8, 3, true, 1.33);
     Object obj4 = Object(E4, &M4);
     scene.addObject(&obj4);
 
     // Add Light
-    LightPoint light1(Point3D(-10, -20, 0), 0.5, white);
+    LightPoint light1(Point3D(-10, -20, 0), 1, white);
     scene.addLight(light1);
     // LightPoint light2(Point3D(10, -20, 0), 0.5, white);
     // scene.addLight(light2);
