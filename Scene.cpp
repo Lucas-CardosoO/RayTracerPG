@@ -50,13 +50,22 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
         for(auto l : this->lights) {
             Vector3D lightDir = l.position - intersectionPoint;
             lightDir.normalize();
+            // currently using curRefractionIndice to know if inside sphere
+            if(curRefractionIndice != 1) normal = -normal;
             if(material->willRefract) {
                 // to remember: n_l*sen(teta_i) = n_2*sen(teta_t), Total Internal Reflection (TIR) when sen(teta_i) > n_2/n_1
-                double n1 = curRefractionIndice, n2 = material->refractiveIndice;
+                double n1 = (curRefractionIndice == 1)? curRefractionIndice: material->refractiveIndice;
+                double n2 = (n1 == 1)? curRefractionIndice: 1;
                 double cos_teta_i = lightDir * normal;
                 double sen_teta_i = std::sqrt(1 - cos_teta_i*cos_teta_i);
 
                 // check if TIR
+                /*
+                    REFRAÇÃO checar https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
+                    bug hints: raio de luz entra na esfera. O ponto de intersecção do próximo trace é um ponto da mesma esfera?
+                    a normal dessa intersecção ( de dentro da esfera ) é calculado da mesma forma?
+
+                */
                 if(n2/n1 > sen_teta_i) {
                     return RGBColor(255, 255, 255); // não sei o que colocar
                 }
