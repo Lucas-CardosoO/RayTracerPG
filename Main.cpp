@@ -102,18 +102,21 @@ int main(int args, char** argv) {
     for(auto objPtr : scene.objects) {
         cout << "{ ";
         Object o = *objPtr;
-        cout << o.geometry->toString() << "} " << endl;
+        cout << o.geometry->toString() << "}\n\n";
     }
 
-    cout << "starting to print\n";
+    cout << "starting to throw rays";
     for(int i = 0; i < img.height; i++) {
+        if(i == img.height/3) cout << ".";
+        if(i == 2*img.height/3) cout << ".";
+        if(i == img.height-1) cout << ". ";
         for(int j = 0; j < img.width; j++) {
             Ray r   = cam.getRay(double(j), double(i), res_w, res_h);
             img.setPixel(i, j, scene.trace(r, 0, 1));
         }
     }
 
-    cout << "done printing\n";
+    cout << "done.\n";
 
     img.saveAsPBM(""); // saving as out
 
