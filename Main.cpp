@@ -63,7 +63,7 @@ int main(int args, char** argv) {
     cam = Camera(Point3D(0, 0, 0), Vector3D(0, 0, 1), Vector3D(0, 1, 0), pi/2, 1, 1.7);
 
     Geometry *E1 = new Sphere(Point3D(0, 0, 9), 1);
-    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.508273, 0.3, 0.4, true, 1.8, false);
+    Material M1 = Material(RGBColor(198, 78, 71), 0.50754,0.8, 0.3, 0.4, false, 1.8, false);
     Object obj =  Object(E1, &M1);
     scene.addObject(&obj);
 
@@ -73,21 +73,24 @@ int main(int args, char** argv) {
     scene.addObject(&obj2);
 
     Geometry *E3 = new Sphere(Point3D(-3, 0, 9), 1);
-    Material M3 = Material(RGBColor(0, 0, 255), 0.45, 0.1, 0.8, 3, true, 0.5, false);
+    Material M3 = Material(RGBColor(255, 255, 255), 0, 0.1, 0.1, 3, true, 1.33, false);
     Object obj3 = Object(E3, &M3);
     scene.addObject(&obj3);
 
+    Geometry *E5 = new Sphere(Point3D(-4.3, 0, 14), 1);
+    Material M5= Material(RGBColor(0, 0, 255), 0.8, 0.6, 0.8, 3, false, 0.5, false);
+    Object obj5 = Object(E5, &M5);
+    scene.addObject(&obj5);
+
     // REFRACTIVE OBJECT
     Geometry *E4 = new Sphere(Point3D(3, 0, 9), 1);
-    Material M4 = Material(RGBColor(255, 0, 0), 0.45, 0.1, 0.8, 3, true, 1.33, false);
+    Material M4 = Material(RGBColor(255, 0, 0), 0.45, 1, 0.8, 3, false, 1.33, true);
     Object obj4 = Object(E4, &M4);
     scene.addObject(&obj4);
 
     // Add Light
-    LightPoint light1(Point3D(-10, -20, 0), 1, white);
+    LightPoint light1(Point3D(-10, -20, 0), 0.3, white);
     scene.addLight(light1);
-    // LightPoint light2(Point3D(10, -20, 0), 0.5, white);
-    // scene.addLight(light2);
 
     res_w = 1280, res_h = 720;
     Image img(res_w, res_h);
