@@ -139,7 +139,7 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
         }
         col.toInt();
     } else {
-        // col = backgroundColor;
+        col = RGBColor(5, 5, 22);
     }
     return col;
 }

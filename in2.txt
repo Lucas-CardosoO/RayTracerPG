@@ -1,0 +1,25 @@
+# resolução da camera: width height
+res 640 360
+# atributos da camera: foco target up fov near. aspect is 1.7 fixed
+camera 0 0 0 0 0 1 0 1 0 1.57079632679 1
+# atributos do material: nome RGB Kd Ks Ka alpha isRefracted refractionIdx isReflective Kt
+material blackPlastic 0 0 0 0.5 0.5 1 0.5 0 1.8 0 0.3
+material shinyRed 255 0 0 0.5922 0.5974 1.986 0.25 0 1 0 0.7
+material shinyBlue 0 0 255 0.5922 0.5974 1.986 0.25 0 1 0 0.7
+material shinyPurple 147 40 155 0.5922 0.5974 1.986 0.25 0 1 0 0.7
+material purplePlastic 147 40 155 0.5 0.5 1 0.5 0 1.8 0 0.3
+material bluePlastic 114 164 211 0.5 0.5 1 0.5 0 1.8 0 0.3
+material shinyBlue 114 164 211 0.5922 0.5974 1.986 0.25 0 1 0 0.7
+material refractiveGlass 0 0 0 0 0 0 0 1 1.33 0 0
+material refractiveWater 0 0 0 0 0 0 0 1 0.7 0 0
+material reflective 247 145 176 0.1 1 0.8 0 0 0 1 0.7
+# atributos da esfera: centro raio materialName
+sphere -5 -23 60 5 blackPlastic
+sphere -23 -3 60 5 shinyRed
+sphere -20 -15 60 5 bluePlastic
+sphere 5 23 60 5 shinyBlue
+sphere 54 -8 60 5 purplePlastic
+sphere 15 15 60 5 shinyPurple
+sphere -34 19 60 5 blackPlastic
+sphere -13 -7 30 10 refractiveGlass
+sphere 0 0 69 6 reflective
