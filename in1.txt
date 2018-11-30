@@ -1,0 +1,18 @@
+# resolução da camera: width height
+res 640 360
+# atributos da camera: foco target up fov near. aspect is 1.7 fixed
+camera 0 0 0 0 0 1 0 1 0 1.57079632679 1
+#atributos do material: nome RGB Kd Ks Ka alpha isRefracted refractionIdx isReflective Kt
+material m1 198 78 71 0.5 0.8 0.3 0.4 0 1.8 0 0.3
+material m2 0 255 0 0.5 0.5 0.5 0.25 0 1 0 0.7
+material m3 255 255 255 0 0.1 0.1 3 1 1.33 0 0.9
+material m5 0 0 255 0.8 0.6 0.8 3 0 0.5 0 0.3
+material m6 20 199 143 0.8 0.6 0.8 3 0 0.5 0 0.4
+material m4 255 0 0 0.45 1 0.5 3 1 1.33 0 0.6
+#atributos da esfera: centro raio materialName
+sphere 0 0 9 1 m1
+sphere 0 1605 50 1600 m2
+sphere -3 0 9 1 m3
+sphere -4.3 0 14 0.3 m5
+sphere 4.3 0 14 0.5 m6
+sphere 3 0 9 1 m4
