@@ -8,15 +8,15 @@ Ray::Ray(Point3D origin, Vector3D direction) {
     this->direction = direction;
 }
 
-Point3D Ray::getOrigin() const {
+Point3D Ray::getOrigin(){
     return this->origin;
 }
 
-Vector3D Ray::getDirection() const {
+Vector3D Ray::getDirection() {
     return this->direction;
 }
 
-Point3D Ray::sample(const double &t) const {
+Point3D Ray::sample(double &t) const {
     return this->origin+(this->direction*t);
 }
 

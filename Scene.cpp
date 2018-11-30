@@ -1,6 +1,5 @@
 #include <vector>
 #include <iostream>
-#include <float.h>
 #include <cmath>
 #include <algorithm>
 
@@ -15,7 +14,7 @@
  *  chama método intersect para cada objeto da cena e retorna verdadeiro caso haja interseção.
  *  Se houver mais de uma interseção, a informação do primeiro hit é guardado no endereço info.
 **/
-bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
+bool Scene::intersect(const Ray &r, ObjectIntersection* info)  {
     ObjectIntersection temp_info;
     bool hit_anyone = false;
     double t_max = DBL_MAX;
@@ -35,7 +34,35 @@ bool Scene::intersect(const Ray &r, ObjectIntersection* info) const {
     return hit_anyone;
 }
 
-RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndice) const {
+double fresnel(Vector3D ray, Vector3D normal, double n,double k){
+    double kr = k;
+    double cosi = ray * normal;
+    double etai = 1, etat = n;
+
+    if (cosi > 0) { 
+        std::swap(etai, etat); 
+    }
+
+    double sint = etai / etat * std::sqrt(std::max(0.0, 1 - cosi * cosi));
+
+    if (sint >= 1) {
+        kr = 1;
+    }
+
+    else {
+        double cost = std::sqrt(std::max(0.0, 1 - sint * sint));
+        if (cosi < 0){
+            cosi = -cosi;
+        }
+        double Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost));
+        double Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost));
+        kr = (Rs * Rs + Rp * Rp) / 2;
+    }
+
+    return kr;
+}
+
+RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndice) {
     
     if (recursionLevel > 10) {
         return RGBColor(0,0,0);
@@ -64,6 +91,7 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
 
             if(infoLight.point == intersectionPoint){
                 difuseScalar += std::max(normal * lightDir, 0.0) * l.intensity;
+                
                 Vector3D proj = ((lightDir * normal)/(normal * normal))*normal;
                 Vector3D R = -lightDir +( 2 * proj);
                 R.normalize();
@@ -130,6 +158,12 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
             RGBColor colorFromReflection1 = RGBColor(0,0,0);
             RGBColor colorFromRefraction = RGBColor(0,0,0);
 
+            double kr = material->refractiveIndice;
+            
+            Vector3D raysd = r.direction;
+            kr = fresnel(raysd , normal, n1, kr);
+
+
             if (k < 0){
                 Vector3D proj = (-r.direction * normalRef)*normalRef;
                 Vector3D R = r.direction +( 2 * proj);
@@ -141,12 +175,13 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
                 colorFromRefraction = trace(Ray(intersectionPoint, refrVec), recursionLevel + 1, curRefractionIndice);
             }
 
-            Vector3D proj = ((-r.direction * normal)/(normal * normal))*normal;
-            Vector3D R = r.direction +( 2 * proj);
-            R.normalize();
-            RGBColor colorFromReflection = trace(Ray(intersectionPoint, R), recursionLevel + 1, curRefractionIndice);
+            // Vector3D proj = ((-r.direction * normal)/(normal * normal))*normal;
+            // Vector3D R = r.direction +( 2 * proj);
+            // R.normalize();
+            // RGBColor colorFromReflection = trace(Ray(intersectionPoint, R), recursionLevel + 1, curRefractionIndice);
 
-            col = 0.2*colorFromReflection + 0.8*colorFromRefraction + 0.8*colorFromReflection1;
+
+            col = colorFromReflection1*kr + colorFromRefraction*(1-kr);//0.2*colorFromReflection + 0.8*colorFromRefraction + 0.8*colorFromReflection1;
         }
         col.toInt();
     } else {
@@ -162,4 +197,6 @@ void Scene::addObject(Object *object) {
 void Scene::addLight(LightPoint light) {
     this->lights.push_back(light);
 }
+
+
 
