@@ -30,7 +30,7 @@ bool Sphere::intersect(const Ray &r, ObjectIntersection *info) const {
     info->normal.normalize();
 
     // std::cout << "But I returned true\n";
-
+    info->t = info->t - 0.0000001;
     if(info->t < 0){
         return false;
     }

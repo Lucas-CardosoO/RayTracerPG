@@ -86,33 +86,67 @@ RGBColor Scene::trace(const Ray &r, int recursionLevel, double curRefractionIndi
         if(material->isRefracted){
             // std::cout << "indice: " << material->refractiveIndice << std::endl;
 
-            double n1 = (curRefractionIndice == 1)? curRefractionIndice: material->refractiveIndice;
-            double n2 = (n1 == 1)? material->refractiveIndice: 1;
-            double cos_teta = -r.direction * normal;
-            double sen_teta = std::sqrt(1 - cos_teta*cos_teta);
-            // std::cout << "teta ok" << std::endl;
-            if(sen_teta > n2/n1) {
-                Vector3D proj = ((-r.direction * normal)/(normal * normal))*normal;
+            // double n1 = (curRefractionIndice == 1)? curRefractionIndice: material->refractiveIndice;
+            // double n2 = (n1 == 1)? material->refractiveIndice: 1;
+            // double cos_teta = -r.direction * normal;
+            // double sen_teta = std::sqrt(1 - cos_teta*cos_teta);
+            // // std::cout << "teta ok" << std::endl;
+            // if(sen_teta > n2/n1) {
+            //     Vector3D proj = ((-r.direction * normal)/(normal * normal))*normal;
+            //     Vector3D R = r.direction +( 2 * proj);
+            //     R.normalize();
+            //     RGBColor reflection = trace(Ray(intersectionPoint, R), recursionLevel+1, curRefractionIndice);
+            //     col = material->Ks*reflection;
+            //     return col;
+            // }
+            // double sen_alfa = n1*sen_teta/n2;
+            // double cos_alfa = std::sqrt(1 - sen_alfa*sen_alfa);
+            // Vector3D t_par = n1/n2*(r.direction + cos_teta*normal);
+            // Vector3D t_ort = - std::sqrt(1 - t_par.len_squared())*normal;
+            // Vector3D t = t_par + t_ort;
+            // t.normalize();
+            // RGBColor colorFromRefraction = trace(Ray(intersectionPoint, t), recursionLevel+1, n2);
+
+            double nDotr = normal * r.direction;
+            double n1 = 1;
+            double n2 = material->refractiveIndice;
+            
+            Vector3D normalRef = normal;
+
+            if(nDotr < 0){
+                nDotr = -nDotr;
+            } else {
+                normalRef = -normal;
+
+                std::swap(n1,n2);
+            }
+
+            double nRatio = n1/n2;
+
+            double cosi = nDotr;
+
+            double k = 1 - nRatio*nRatio*(1- cosi*cosi);
+
+            RGBColor colorFromReflection1 = RGBColor(0,0,0);
+            RGBColor colorFromRefraction = RGBColor(0,0,0);
+
+            if (k < 0){
+                Vector3D proj = (-r.direction * normalRef)*normalRef;
                 Vector3D R = r.direction +( 2 * proj);
                 R.normalize();
-                RGBColor reflection = trace(Ray(intersectionPoint, R), recursionLevel+1, curRefractionIndice);
-                col = material->Ks*reflection;
-                return col;
+                colorFromReflection1 = trace(Ray(intersectionPoint, R), recursionLevel + 1, curRefractionIndice);
+            } else {
+                Vector3D refrVec = nRatio*r.direction + (nRatio*cosi - std::sqrt(k))*normalRef;
+                refrVec.normalize();
+                colorFromRefraction = trace(Ray(intersectionPoint, refrVec), recursionLevel + 1, curRefractionIndice);
             }
-            double sen_alfa = n1*sen_teta/n2;
-            double cos_alfa = std::sqrt(1 - sen_alfa*sen_alfa);
-            Vector3D t_par = n1/n2*(r.direction + cos_teta*normal);
-            Vector3D t_ort = - std::sqrt(1 - t_par.len_squared())*normal;
-            Vector3D t = t_par + t_ort;
-            t.normalize();
-            RGBColor colorFromRefraction = trace(Ray(intersectionPoint, t), recursionLevel+1, n2);
-           
+
             Vector3D proj = ((-r.direction * normal)/(normal * normal))*normal;
             Vector3D R = r.direction +( 2 * proj);
             R.normalize();
             RGBColor colorFromReflection = trace(Ray(intersectionPoint, R), recursionLevel + 1, curRefractionIndice);
 
-            col = 0.2*colorFromReflection + 0.8*colorFromRefraction;
+            col = 0.2*colorFromReflection + 0.8*colorFromRefraction + 0.8*colorFromReflection1;
         }
         col.toInt();
     } else {
