@@ -57,7 +57,7 @@ void read(const string &path_in) {
 
 
 int main(int args, char** argv) {
-   read("./in2.txt");
+   read("./in1.txt");
     LightPoint light2(Point3D(10, -20, 0), 0.5, white);
     scene.addLight(light2);
     
